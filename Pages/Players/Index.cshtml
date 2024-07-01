@@ -1,0 +1,82 @@
+@page
+@using League.Pages
+@using League.Models.Views
+@model PlayersModel
+@{
+    ViewData["Title"] = "Players";
+    string? FavoriteTeam=HttpContext.Session.GetString("FavoriteTeam");
+}
+<h1>@ViewData["Title"]</h1>
+<div class="jumbotron p-2 d-flex">
+    <form class="d-flex">
+        <div class="form-group">
+            <label class="col-form-label" asp-for="SortBy" class="control-label">Sort by:</label>
+            <select class="form-control" asp-for="SortBy" onchange="this.form.submit();">
+                <option value="Name">Name</option>
+                <option value="Depth">Depth</option>
+                <option value="Position">Position</option>
+                <option value="Team">Team</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="FilterBy" class="control-label">Filter by:</label>
+            @*The code below gets the value of the old FilterBy value and changes the value depending if it's an input or select element.*@
+            <select class="form-control" asp-for="FilterBy" onfocus="this.old_value=$('#FilterBy').val()" onchange="clear_input_or_select(this); this.form.submit();">
+                <option value="Name">Name</option>
+                <option value="Depth">Depth</option>
+                <option value="Position">Position</option>
+                <option value="Team">Team</option>
+            </select>
+            <script>
+                function clear_input_or_select(this_obj){
+                    if(this_obj.old_value==='Name') $('#Filter').val(''); else $('#Filter').empty();
+                }
+            </script>
+        </div>
+        @switch(Model.FilterBy){
+            case "Name":
+                <div class="form">
+                    <label class="col-form-label" asp-for="Filter" class="control-label">Filter:</label>
+                    <input class="form-control" asp-for="Filter" onchange="this.form.submit();">
+                    <button class="form-control" type="button" onclick="$('#Filter').val(''); this.form.submit();">Clear</button>
+                </div>
+                break;
+            default:
+                <div class="form">
+                    <label class="col-form-label" asp-for="Filter" class="control-label">Filter:</label>
+                    <select class="form-control" asp-for="Filter" onchange="this.form.submit();">
+                        <option value=""></option>
+                        @if(Model.FilterList!=null){
+                            @foreach(string str in Model.FilterList){
+                                <option value="@str">@str</option>
+                            } 
+                        }
+                    </select>
+                    <button class="form-control" type="button" onclick="$('#Filter').empty(); this.form.submit();">Clear</button>
+                </div>
+                break;
+        }
+    </form>
+</div>
+<div class="row">
+    <div class="d-flex bg-secondary text-white">
+        <partial name="_PlayersSection" model="new PlayersSection()" />
+    </div>
+    @if (Model.QPlayers != null)
+    {
+        <section class="grid">
+            @foreach (var qplayer in Model.QPlayers)
+            {
+                if(qplayer.TeamId!=FavoriteTeam){
+                    <a class="row" asp-page="/Player/Index" asp-route-id="@qplayer.PlayerId">
+                        <partial name="_PlayersSection" model="new PlayersSection(qplayer)" />
+                    </a>
+                }else{
+                    <a class="row favorite" asp-page="/Player/Index" asp-route-id="@qplayer.PlayerId">
+                        <partial name="_PlayersSection" model="new PlayersSection(qplayer)" />
+                    </a>
+                }
+            }
+        </section>
+    }
+</div>

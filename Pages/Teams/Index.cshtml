@@ -1,0 +1,31 @@
+@page
+@using League.Pages
+@using League.Models.Views
+@model TeamsModel
+@{
+    ViewData["Title"] = "Teams";
+    string? FavoriteTeam=HttpContext.Session.GetString("FavoriteTeam");
+}
+<h1>@ViewData["Title"]</h1>
+<div class="row">
+    <div class="d-flex bg-secondary text-white">
+        <partial name="_TeamsSection" model="new TeamsSection()" />
+    </div>
+    @if (Model.QTeams != null)
+    {
+        <section class="grid">
+        @foreach (var qteam in Model.QTeams)
+        {
+            if(qteam.TeamId==FavoriteTeam){
+                <a class="row favorite" asp-page="/Team/Index" asp-route-id="@qteam.TeamId">
+                    <partial name="_TeamsSection" model="new TeamsSection(qteam)" />
+                </a>
+            }else{
+                <a class="row" asp-page="/Team/Index" asp-route-id="@qteam.TeamId">
+                    <partial name="_TeamsSection" model="new TeamsSection(qteam)" />
+                </a>
+            }
+        }
+        </section>
+    }
+</div>

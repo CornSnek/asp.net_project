@@ -1,0 +1,35 @@
+@model League.Models.Views.PlayersSection;
+@{
+  bool has_depth = int.TryParse(Model.Depth, out int depth);
+}
+@if (Model.Depth == "Depth") //Just the section.
+{
+  <div class="col-2" style="flex:0 0 12%">@Model.Name</div>
+  <div class="col-1" style="flex:0 0 6%">@Model.Depth</div>
+  <div class="col-1" style="flex:0 0 6%">@Model.Position</div>
+  <div class="col-1" style="flex:0 0 12%">@Model.TeamName</div>
+}
+else
+{
+  @if (has_depth && depth == 1)
+  {
+    <div class="col-2 starter" style="flex:0 0 12%">@Model.Name</div>
+    <div class="col-1 starter" style="flex:0 0 6%">@Model.Depth</div>
+    <div class="col-1 starter" style="flex:0 0 6%">@Model.Position</div>
+    <div class="col-1 starter" style="flex:0 0 12%">@Model.TeamName</div>
+  }
+  else
+  {
+    <div class="col-2" style="flex:0 0 12%">@Model.Name</div>
+    if (!has_depth)
+    {
+      <div class="col-1" style="flex:0 0 6%"><i>@Model.Depth</i></div>
+    }
+    else
+    {
+      <div class="col-1" style="flex:0 0 6%">@Model.Depth</div>
+    }
+    <div class="col-1" style="flex:0 0 6%">@Model.Position</div>
+    <div class="col-1" style="flex:0 0 12%">@Model.TeamName</div>
+  }
+}

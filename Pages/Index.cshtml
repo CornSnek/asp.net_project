@@ -1,0 +1,16 @@
+﻿@page
+@using League.Pages
+@model IndexModel
+@{
+    ViewData["Title"] = "League Home";
+}
+@* display the logo and league name *@
+@if(Model.Leagues!=null)
+{
+    @foreach(League.Models.League league in Model.Leagues)
+    {
+        <div class="jumbotron p-2 text-center">
+          <h2 class="display-3"><img src="/image/@(league.LeagueId)/@(league.LeagueId).png"> @league.Name</h2>
+        </div>
+    }
+}

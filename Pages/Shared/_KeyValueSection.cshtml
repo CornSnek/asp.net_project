@@ -1,0 +1,9 @@
+@model League.Models.Views.KeyValueSection;
+<div class="row">
+  <div class="border" style="flex:0 0 10%">@Model.SectionName</div>
+  @if(Model.Value!="N/A"){
+    <div class="col-2 border">@Model.Value</div>
+  }else{
+    <div class="col-2 border"><i>@Model.Value</i></div>
+  }
+</div>

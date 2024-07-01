@@ -1,0 +1,13 @@
+@model League.Models.Views.TeamsSection;
+<div class="col-1" style="flex:0 0 8%">@Model.Name</div>
+<div class="col-2" style="flex:0 0 12%">@Model.Location</div>
+<div class="col-1" style="flex:0 0 8%">@Model.Win</div>
+<div class="col-1" style="flex:0 0 8%">@Model.Loss</div>
+<div class="col-1" style="flex:0 0 8%">@Model.Tie</div>
+<div class="col-2" style="flex:0 0 12%">@Model.WinPercentage</div>
+<div class="col-1" style="flex:0 0 12%">@Model.DivisionName</div>
+@if(!string.IsNullOrEmpty(Model.ConferenceName)){
+  <div class="col-1" style="flex:0 0 12%">@Model.ConferenceName</div>
+}else{
+  <div class="col-1" style="flex:0 0 12%"><i>N/A</i></div>
+}

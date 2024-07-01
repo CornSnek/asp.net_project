@@ -1,0 +1,109 @@
+@page "{id}"
+@using League.Pages
+@using League.Models.Views
+@model TeamModel
+@{
+  var team = Model.ThisTeam;
+  if (team != null)
+  {
+    ViewData["Title"] = "Team - " + team.Name;
+  }
+  else
+  {
+    ViewData["Title"] = "Name N/A";
+  }
+}
+<h1>@ViewData["Title"]</h1>
+@if (team != null)
+{
+  @if (HttpContext.Request.Method==HttpMethods.Post && HttpContext.Session.GetString("FavoriteTeam")==Model.FavoriteId)
+  {
+    <div class="alert alert-success" role="alert">
+      Your Favorite Team for this session is now set to @(team.Name).
+    </div>
+  }
+  <section class="grid">
+    <partial name="_KeyValueSection" model='new KeyValueSection("Name", team.Name)' />
+    <div class="row">
+      <div class="col-1 border" style="flex:0 0 10%">Logo</div>
+      <div class="col-2 border"><img src="/image/nfl/logo/@(team.TeamId).png" style="height: auto; width: 100%;"></div>
+    </div>
+    <div class="row">
+      <div class="col-1 border" style="flex:0 0 10%"><br></div>
+      @if (HttpContext.Session.GetString("FavoriteTeam") != team.TeamId)
+      {
+        <a class="col-2 btn btn-warning" onclick='document.getElementById("post_favorite").submit();'>
+          <form id="post_favorite" method="post">
+            <input type="hidden" asp-for="FavoriteId" value="@team.TeamId">
+          </form>
+          Click to Favorite This Team
+        </a>
+      }
+      else
+      {
+        <div class="col-2 btn btn-secondary">Team Favorited</div>
+      }
+    </div>
+    <partial name="_KeyValueSection" model='new KeyValueSection("Location", team.Location)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Stadium", team.Stadium)' />
+    <div class="row">
+      <div class="col-1 border" style="flex:0 0 10%">Stadium Image<br>(Click to View Full Size)</div>
+      <div class="col-2 border">
+        <a href="/image/nfl/stadium/@(team.TeamId).jpg" target="_blank">
+          <img src="/image/nfl/stadium/@(team.TeamId).jpg" style="height: auto; width: 100%;">
+        </a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-1 border" style="flex:0 0 10%">Seating Chart<br>(Click to View Full Size)</div>
+      <div class="col-2 border">
+        <a href="/image/nfl/seating/@(team.TeamId).png" target="_blank">
+          <img src="/image/nfl/seating/@(team.TeamId).png" style="height: auto; width: 100%;">
+        </a>
+      </div>
+    </div>
+    <partial name="_KeyValueSection" model='new KeyValueSection("Capacity", team.Capacity)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Address", team.Address)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("City", team.City)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("State", team.State)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Zip", team.Zip)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Latitude", team.Latitude)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Longitude", team.Longitude)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Points For", team.PointsFor)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Points Against", team.PointsAgainst)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Wins", team.Win)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Losses", team.Loss)' />
+    <partial name="_KeyValueSection" model='new KeyValueSection("Ties", team.Tie)' />
+    <partial name="_KeyValueSection"
+      model='new KeyValueSection("Win Percentage", (double)team.Win/(team.Win+team.Loss+team.Tie),"P2")' />
+  </section>
+  <h2>@team.Name Players - Click to View Player</h2>
+  @if (team.Players != null)
+  {
+    @foreach (var player in team.Players)
+    {
+
+    }
+  }
+
+  <div class="row">
+    <div class="d-flex bg-secondary text-white">
+      <partial name="_PlayersSection" model="new PlayersSection()" />
+    </div>
+    @if (team.Players != null)
+    {
+      <section class="grid">
+        @foreach (var player in team.Players)
+        {
+          <a class="row" asp-page="/Player/Index" asp-route-id="@player.PlayerId">
+            <partial name="_PlayersSection" model="new PlayersSection(player,team.Name)" />
+          </a>
+        }
+      </section>
+    }
+  </div>
+}
+<hr>
+<div class="d-grid mx-auto">
+  <a class="btn btn-secondary" asp-page="/Teams/Index">Back to Teams Page</a>
+</div>

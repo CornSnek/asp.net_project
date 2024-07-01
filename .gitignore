@@ -1,0 +1,6 @@
+.vscode
+bin
+obj
+League.db
+League.db-shm
+League.db-wal

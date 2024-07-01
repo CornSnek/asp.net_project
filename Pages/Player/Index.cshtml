@@ -1,0 +1,57 @@
+@page "{id}"
+@using League.Pages
+@using League.Models.Views
+@model PlayerModel
+@{
+    var player = Model.ThisPlayer;
+    if (player != null)
+    {
+        ViewData["Title"] = "Player - " + player.Name;
+    }
+    else
+    {
+        ViewData["Title"] = "Name N/A";
+    }
+}
+<h1>@ViewData["Title"]</h1>
+@if (player != null)
+{
+    <section class="grid">
+        <partial name="_KeyValueSection" model='new KeyValueSection("Name", player.Name)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("ID", player.PlayerId)' />
+        @if (player.Team is Models.Team team)
+        {
+            <div class="row">
+                <div class="col-1 border" style="flex:0 0 10%">Team<br>(Click button<br>to view team)</div>
+                <div class="col-2 border"><img src="/image/nfl/logo/@(team.TeamId).png" style="height: auto; width: 100%;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1 border" style="flex:0 0 10%"></div>
+                <a class="col-2 btn btn-warning" asp-page="/Team/Index" asp-route-id="@team.TeamId">@team.Name (@team.TeamId)</a>
+            </div>
+        }
+        <partial name="_KeyValueSection" model='new KeyValueSection("Number", player.Number)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Position", player.Position)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Height", player.Height)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Weight", player.Weight)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Age", player.Age)' />
+        @if (player.BirthDate is DateTime birth_date)
+        {
+            <partial name="_KeyValueSection" model='new KeyValueSection("Birth Date", birth_date.ToString("MM/dd/yyyy"))' />
+        }
+        <partial name="_KeyValueSection" model='new KeyValueSection("Experience", player.Experience)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Draft Year", player.DraftYear)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Draft Round", player.DraftRound)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Draft Pick", player.DraftPick)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("College", player.College)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("State", player.State)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Rank", player.Rank)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Rating", player.Rating)' />
+        <partial name="_KeyValueSection" model='new KeyValueSection("Depth", player.Depth)' />
+    </section>
+}
+<hr>
+<div class="d-grid mx-auto">
+    <a class="btn btn-secondary" asp-page="/Players/Index">Back to Players Page</a>
+</div>
